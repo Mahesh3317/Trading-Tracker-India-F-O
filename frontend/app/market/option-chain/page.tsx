@@ -14,7 +14,11 @@ export default function OptionChainPage() {
 
     useEffect(() => {
         // Initialize WebSocket connection
-        const ws = new WebSocket(`ws://localhost:8000/market/ws/${symbol}`)
+        // Initialize WebSocket connection
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        const wsProtocol = apiUrl.startsWith('https') ? 'wss' : 'ws';
+        const wsHost = apiUrl.replace(/^https?:\/\//, '');
+        const ws = new WebSocket(`${wsProtocol}://${wsHost}/market/ws/${symbol}`);
 
         ws.onopen = () => {
             console.log("Connected to Market Data WS")
